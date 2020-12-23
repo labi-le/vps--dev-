@@ -82,19 +82,6 @@ trait EventCommands
 
             ],
 
-            'ua' =>
-            [
-                [
-                    'key' => 'yes',
-                    'method' => ['_sceneUA']
-                ],
-
-                [
-                    'key' => 'no',
-                    'method' => ['_sceneUA']
-                ]
-            ],
-
         ];
     }
 
@@ -105,7 +92,7 @@ trait EventCommands
         if ($timer->test_passed() == 'off') {
             if (!$timer->turing()) {
                 $timer->remove();
-                $this->vk->msg('~Ты~ не прошёл тест, пока-пока')->send();
+                $this->vk->msg()->voice('https://psv4.userapi.com/c853028//u386342313/audiomsg/d2/fa96a314cd.mp3')->send();
                 $this->vk->removeChatUser($this->chat_id, $this->user_id);
             } elseif ($timer->turing()) {
                 $this->vk->msg('Васап ниггер, тест пройден')->send();
@@ -123,7 +110,7 @@ trait EventCommands
             $this->vk->msg('Ну всё я теперь королева этой конференции поклоняйтесь мне или бан 😡')->send();
             Conference::load($this->chat_id);
         } else {
-            $this->vk->msg('Эй ~ты~ кусок ебаного дерьма, где моя чёртова админка?')->send();
+            $this->vk->msg('Где моя админка я не поняв?')->send();
         }
     }
 
@@ -133,31 +120,17 @@ trait EventCommands
         $this->_guiSettings('event');
     }
 
+
     protected function _eventCheckAdmin()
     {
         if (!$this->vk->isAdmin($this->user_id, $this->peer_id)) {
             die($this->vk->eventAnswerSnackbar('А когда ты успел стать администратором??'));
         }
     }
-
-    protected function _cbHi()
-    {
-        $this->vk->eventAnswerSnackbar('Привет');
-    }
-
-    protected function _suicide()
+    
+    protected function suicide()
     {
         $this->vk->removeChatUser($this->chat_id, $this->user_id);
-    }
-
-    protected function _sceneUA()
-    {
-        if ($this->payload['ua'] == 'yes') {
-            $this->vk->msg('Ах ти ебучий хохол пішов нахуй звідси піндос свинка 😡')->send();
-            $this->vk->removeChatUser($this->chat_id, $this->user_id);
-        } else {
-            $this->vk->msg('Фу тупа русня як же я тебе ненавиджу 😑😑🇺🇦')->send();
-        }
     }
 
     protected function _not_supported_button()

@@ -1,6 +1,6 @@
 <?php
 
-require_once 'db.php';
+require_once 'lib/db.php';
 
 /**
  * db query
@@ -11,15 +11,6 @@ trait dbQuery
     public $id;
     public $column;
     public $data;
-
-    public function _printconsol($data)
-    {
-        file_put_contents(
-            "php://stdout",
-            popen('clear', 'w')
-        );
-        file_put_contents("php://stdout", print_r($data, true) . "\n");
-    }
 
     private function checkDB($id)
     {

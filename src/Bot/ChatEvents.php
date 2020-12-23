@@ -26,20 +26,13 @@ trait ChatEvents
             $user_id = $this->action_member_id ?? $this->user_id;
             Timer::load($user_id);
 
-            $firstNum = rand(1, 20);
-            $secondNum = rand(1, 20);
-
-            $text = $firstNum . ' + ' . $secondNum;
-            $sum = $firstNum  +  $secondNum;
-
-            $invalidSum[0] = $sum - \rand(1, 10);
-            $invalidSum[1] = $sum + \rand(1, 10);
-            $invalidSum[2] = $sum - \rand(1, 10);
-            $invalidSum[3] = $sum;
-            $invalidSum[4] = $sum + \rand(1, 10);
+            $turing = $this->turingTest();
+            $invalidSum = $turing['array'];
+            $result = $turing['result'];
+            $text = $turing['text'];
 
 
-            $this->vk->msg('Тест на выявление бота или тупого долбаёба, выбери правильный ответ, иначе  ~ты~ будешь кикнут' . \PHP_EOL . \PHP_EOL . 'Пример таков: ' . $text)
+            $this->vk->msg('Тест Дениса Тьюринга на выявление бота или тупого долбаёба, выбери правильный ответ, иначе  ~ты|' . $user_id . '~ будешь кикнут' . \PHP_EOL . \PHP_EOL . 'Пример таков: ' . $text)
                 ->kbd(call_user_func(function () use ($invalidSum) {
                     $kb = [];
                     $str = 0;
@@ -51,7 +44,7 @@ trait ChatEvents
                 ->send();
 
             $timer = Timer::load($user_id);
-            $timer->set_valid_num($sum);
+            $timer->set_valid_num($result);
             $timer->off_test_passed();
 
             sleep(60);

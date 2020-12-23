@@ -8,8 +8,8 @@ require_once 'src/autoload.php';
 
 use Labile\Bot\Bot as Bot;
 
-define('VK_TOKEN', 'e11bc8967c430628289810cf218862baf69f442c7a52ca4f6b1908dd9d6818f19f3ce6c350b5a95929a85');
-define('VK_CONFIRM_KEY', '3a36fa4a');
+define('VK_TOKEN', '96964480401aef6479a3cdab070eeab8cab0e10fceb03c1ee474e055a83a2493af9049ff2a55b39599ae6');
+define('VK_CONFIRM_KEY', 'b1be9583');
 define('VK_VERSION', 5.126);
 
 define('DB_LOGIN', 'sliva');

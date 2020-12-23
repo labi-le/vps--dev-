@@ -17,7 +17,7 @@ trait Commands
 
             [
                 'text' => ['/reg'],
-                'method' => ['_checkAdmin', '_chatCreate']
+                'method' => ['_chatCreate']
             ],
 
             [
@@ -71,26 +71,66 @@ trait Commands
             ],
 
             [
-                'text' => ['укр'],
-                'method' => ['_UAStart']
+                'text' => ['{пиво}', '{пива}'],
+                'method' => ['_pivo'],
             ],
 
             [
-                'text' => ['{пиво}', '{пива}'],
-                'method' => ['_pivo', '_pivo1', '_pivo2', '_pivo3'],
-                'random_method' => true
-            ]
+                'text' => ['{слива}'],
+                'method' => ['_lyudaSliva'],
+            ],
+
+            [
+                'text' => ['скороговорка'],
+                'method' => ['_lyudaSkorogovorki'],
+            ],
+
+            [
+                'text' => ['[|cat', '[|котиков', '[|котикаф', '[|кица'],
+                'method' => ['_cat']
+            ],
+
+            [
+                'text' => ['{😁}', '{😄}', '{😂}', '{🤣}', '{хаха}'],
+                'method' => ['_lyudaSmeh'],
+            ],
+
+            [
+                'text' => ['{🥺}', '{😍}', '{😘}', '{🥰}', '{😻}', '{☺}'],
+                'method' => ['_lyudaVanil'],
+            ],
+
 
         ];
     }
 
+
     protected function print()
     {
-        $data = $this->admins_ids;
-        $data[] = 418618;
-        $this->admins_ids[] = 418618;
-        $this->_printr( );
+
+        // $this->vk->msg()->img($cat)->send();
+        $this->_printr(['color' =>  'switch', 'bool' => true]);
         // $this->_printr($vk);
+    }
+
+    protected function _cat()
+    {
+        $count = intval($this->textWithoutPrefix());
+
+
+        if ($count > 10 or $count <= 0) {
+            $this->vk->msg("Отинь многа котикаф либо их ваще нет!!!")->send();
+        } else {
+
+            $cat = [];
+            $smile = \str_repeat('🐈', $count);
+
+            for ($i = 0; $i < $count; $i++) {
+                $cat[] = json_decode(file_get_contents('https://aws.random.cat/meow'));
+            }
+
+            $this->vk->msg($smile)->img($cat)->send();
+        }
     }
 
     protected function _addDiscord()
@@ -98,14 +138,16 @@ trait Commands
         $this->vk->msg("а ну-ка залетел в наш дискорд\n\nhttps://discord.gg/NqABGZb\nhttps://discord.gg/NqABGZb\nhttps://discord.gg/NqABGZb")->send();
     }
 
+    protected function марков()
+    {
+        //маша пиши
+    }
+
     protected function _who()
     {
         $gender = [1 => 'посудомойка', 2 => 'спермобак'];
         $data = $this->user_info;
         $this->vk->msg('Ты ~full~, а по гендеру ' . $gender[$data['sex']])->send();
-
-        // $this->_printr($data);
-        // $this->_printconsol($data);
     }
 
     protected function _whoGender()
@@ -123,9 +165,9 @@ trait Commands
         $text = $this->textWithoutPrefix();
 
         if (mb_strlen($text) == 0) {
-            if ($this->reply_message !== []) {
+            if (!is_null($this->reply_message)) {
                 $this->vk->removeChatUser($this->chat_id, $this->reply_message['from_id']);
-            } elseif ($this->fwd_messages !== []) {
+            } elseif (!is_null($this->fwd_messages)) {
                 foreach ($this->fwd_messages as $message) {
                     if ('-' . $this->group_id != $message['from_id']) {
                         $this->vk->removeChatUser($this->chat_id, $message['from_id']);
@@ -137,23 +179,15 @@ trait Commands
             $text = $this->multiexplode(['[', ']', ' '], $text);
             $text = array_filter($text);
 
-
-
-            $ids = [];
             foreach ($text as $id) {
                 $id = strstr($id, '|', true);
                 $id = str_replace(['public', 'club', 'id'], ['-', '-', ''], $id);
-
-                // $this->_printconsol($ids);
 
                 if ('-' . $this->group_id != $id) {
                     $this->vk->removeChatUser($this->chat_id, $id);
                 }
             }
         }
-
-        // $this->_printr($ids);
-        // $this->_printconsol($ids);
     }
 
     protected function _kickAll()
@@ -167,22 +201,64 @@ trait Commands
 
     protected function _pivo()
     {
-        $this->vk->msg('да, пиво лучшее что создал бог')->send();
+        $messages = [
+            'да, пиво лучшее что создал бог',
+            'да, пиво лучшее что создал бог',
+            'прекрасней пива только два пива',
+            'эх как же хочется пивка'
+        ];
+
+        $this->vk->msg(array_rand(array_flip($messages)))->send();
     }
 
-    protected function _pivo1()
+    protected function _lyudaSliva()
     {
-        $this->vk->msg('вселенная создала пиво и позже человека')->send();
+        $voices = [
+            'https://psv4.userapi.com/c853020//u386342313/audiomsg/d17/dba02f45b4.mp3',
+            'https://psv4.userapi.com/c853020//u386342313/audiomsg/d14/7aecca1a10.mp3',
+            'https://psv4.userapi.com/c852732//u386342313/audiomsg/d18/302848620e.mp3',
+            'https://psv4.userapi.com/c852636//u386342313/audiomsg/d14/35f9592f4c.mp3',
+            '',
+            '',
+        ];
+        $this->vk->msg()
+            ->voice(array_rand(array_flip($voices)))
+            ->send();
     }
 
-    protected function _pivo2()
+    protected function _lyudaSmeh()
     {
-        $this->vk->msg('прекрасней пива только два пива')->send();
+        $this->vk->msg()
+            ->voice('https://psv4.userapi.com/c852436//u386342313/audiomsg/d5/25da11c48d.mp3')
+            ->send();
     }
 
-    protected function _pivo3()
+    protected function _lyudaVanil()
     {
-        $this->vk->msg('эх как же хочется пивка')->send();
+        $this->vk->msg()
+            ->voice('https://psv4.userapi.com/c852416//u386342313/audiomsg/d6/a8e16a7cda.mp3')
+            ->send();
+    }
+
+    protected function _lyudaSkorogovorki()
+    {
+        $voices = [
+            'https://psv4.userapi.com/c852620//u386342313/audiomsg/d4/63331c98c5.mp3',
+            'https://psv4.userapi.com/c852724//u386342313/audiomsg/d6/0a2c6da665.mp3',
+            'https://psv4.userapi.com/c852628//u386342313/audiomsg/d16/ccba467d60.mp3',
+            'https://psv4.userapi.com/c852732//u386342313/audiomsg/d1/70a7339186.mp3',
+            'https://psv4.userapi.com/c852528//u386342313/audiomsg/d8/07fde97e2e.mp3',
+            'https://psv4.userapi.com/c205420//u386342313/audiomsg/d1/9c73a5a8a0.mp3',
+            'https://psv4.userapi.com/c852428//u386342313/audiomsg/d17/99a10b0ab6.mp3',
+            'https://psv4.userapi.com/c852724//u386342313/audiomsg/d18/3b5b8ac5ab.mp3',
+            'https://psv4.userapi.com/c852536//u386342313/audiomsg/d17/f89fbd1712.mp3',
+            'https://psv4.userapi.com/c852520//u386342313/audiomsg/d2/c1ec545da1.mp3',
+            'https://psv4.userapi.com/c852624//u386342313/audiomsg/d17/d319771972.mp3',
+            '',
+        ];
+        $this->vk->msg()
+            ->voice(array_rand(array_flip($voices)))
+            ->send();
     }
 
     protected function _setWelcomeMsg()
@@ -236,13 +312,9 @@ trait Commands
     protected function _checkAdmin()
     {
         if (!$this->vk->isAdmin($this->user_id, $this->peer_id)) {
-            die($this->vk->msg('~!fn~, когда ты успел стать админом?')->send());
+            $this->vk->msg('~!fn~, когда ты успел стать админом?')->send();
+            die();
         }
-    }
-
-    protected function _hi()
-    {
-        $this->vk->msg('привет')->send();
     }
 
     protected function _guiSettings($type = 'create')
@@ -276,16 +348,5 @@ trait Commands
                 ->kbd($kb, true, false)
                 ->sendEdit($this->peer_id, null, $this->conversation_message_id);
         }
-    }
-
-    protected function _UAStart()
-    {
-        $yes = $this->vk->buttonText('Да', 'green', ['ua' => 'yes']);
-        $no = $this->vk->buttonText('Нет', 'red', ['ua' => 'no']);
-
-        $this->vk->msg('Любишь Украину\З Украiни?')
-            ->kbd([[$yes, $no]], true, false)
-            ->addImg('https://wallbox.ru/wallpapers/main/201611/b592c06e6599131.jpg')
-            ->send();
     }
 }

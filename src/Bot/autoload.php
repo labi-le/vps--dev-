@@ -2,6 +2,7 @@
 
 namespace Labile\Bot;
 $path_dir = __DIR__ . '/';
+require_once($path_dir .'DB.php');
 require_once($path_dir .'Utils.php');
 require_once($path_dir .'Chat.php');
 require_once($path_dir . 'ChatEvents.php');

@@ -178,4 +178,25 @@ trait Utils
         $launch = explode($delimiters[0], $ready);
         return  $launch;
     }
+
+    public function turingTest()
+    {
+        $firstNum = rand(1, 10);
+        $secondNum = rand(1, 10);
+        $thirdNum = rand(1, 10);
+        $fourthNum = rand(1, 5);
+
+        $text = $firstNum . ' + ' . $secondNum . ' - ' . $thirdNum . ' * ' . $fourthNum;
+        $sum = $firstNum + $secondNum - $thirdNum * $fourthNum;
+
+        $invalidSum[] = $sum - \rand(1, 10);
+        $invalidSum[] = $sum + \rand(1, 10);
+        $invalidSum[] = $sum - \rand(1, 10);
+        $invalidSum[] = $sum;
+        // $invalidSum[] = $sum + \rand(1, 10);
+
+        shuffle($invalidSum);
+
+        return ['array' => $invalidSum, 'result' => $sum, 'text' => $text];
+    }
 }

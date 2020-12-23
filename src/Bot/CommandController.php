@@ -19,9 +19,6 @@ trait CommandController
                 } else {
                     foreach ($cmd['text'] as $text) {
                         if ($this->formatText($text)) {
-                            if (isset($cmd['random_method']) and $cmd['random_method']) {
-                                $cmd['method'] = $cmd['method'][array_rand($cmd['method'])];
-                            }
                             $this->manyMethodsExecute($cmd['method']);
                             break;
                         }
